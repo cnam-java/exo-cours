@@ -1,22 +1,11 @@
 package main;
 
-import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import DAO.DAO;
 import DAO.DAOAccount;
 import DAO.DAOException;
-
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import java.sql.PreparedStatement;
 
 public class Launcher {
 
@@ -30,7 +19,7 @@ public class Launcher {
 		LOG.info("Chargement de l'objet...");
 		DAO<Account> accountDAO = new DAOAccount();
 		try{
-			Account a = accountDAO.find(1);
+			Account a = accountDAO.find(2);
 			LOG.info(a.getFirst_name()); 
 		} catch (DAOException e){
 			LOG.error("Error during loading DAO user", e);

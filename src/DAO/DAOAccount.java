@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 
@@ -58,15 +59,44 @@ public class DAOAccount implements DAO<Account>{
 	}
 
 	@Override
-	public Account create(Account obj) {
-		// TODO Auto-generated method stub
-		return null;
+	public void create(Account a) throws DAOException {
+		final String sql = "INSERT INTO `accounts` VALUES (NULL,?,?,?)";
+		Connection c = null;
+    	PreparedStatement st = null;
+		ResultSet r = null;
+		try {
+     		c = DriverManager.getConnection(URL, LOGIN, PASSWORD);
+			st = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, a.getFirst_name());
+			st.setString(2, a.getLast_name());
+			st.setDouble(3, a.getAmount());
+			st.executeUpdate();
+
+			r = st.getGeneratedKeys();
+
+			if (r.next()) {
+				a.setId(r.getInt(1));
+			}else{
+				throw new DAOException("Error during account insertion.");	
+			}
+		} catch (SQLException e) {
+			throw new DAOException("Error during account insertion.", e);
+		} finally {
+			try {
+				if (r != null)
+					r.close();
+				if (st != null)
+					st.close();
+				if (c != null)
+					c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	@Override
-	public Account update(Account obj) {
-		// TODO Auto-generated method stub
-		return null;
+	public void update(Account obj) {
 	}
 
 	@Override
