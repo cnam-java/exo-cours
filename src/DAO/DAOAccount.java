@@ -11,6 +11,7 @@ import java.sql.Statement;
 import org.apache.log4j.Logger;
 
 public class DAOAccount implements DAO<Account>{
+	
 	private static final Logger LOG = Logger.getLogger(DAOAccount.class.getName());
 	private static final String URL = "jdbc:mysql://localhost/cnam?useSSL=false";
 	private static final String LOGIN = "root";
@@ -59,23 +60,24 @@ public class DAOAccount implements DAO<Account>{
 	}
 
 	@Override
-	public void create(Account a) throws DAOException {
-		final String sql = "INSERT INTO `accounts` VALUES (NULL,?,?,?)";
+	public void create(Object a) throws DAOException {
+		final String sql = "INSERT INTO `accounts` VALUES (NULL,?,?,?,?)";
 		Connection c = null;
     	PreparedStatement st = null;
 		ResultSet r = null;
 		try {
      		c = DriverManager.getConnection(URL, LOGIN, PASSWORD);
 			st = c.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			st.setString(1, a.getFirst_name());
-			st.setString(2, a.getLast_name());
-			st.setDouble(3, a.getAmount());
+			st.setString(1, ((Account) a).getFirst_name());
+			st.setString(2, ((Account) a).getLast_name());
+			st.setDouble(3, ((Account) a).getAmount());
+			st.setInt(4, ((Account) a).getIdBank()); 
 			st.executeUpdate();
 
 			r = st.getGeneratedKeys();
 
 			if (r.next()) {
-				a.setId(r.getInt(1));
+				((Account) a).setId(r.getInt(1));
 			}else{
 				throw new DAOException("Error during account insertion.");	
 			}
@@ -96,11 +98,11 @@ public class DAOAccount implements DAO<Account>{
 	}
 
 	@Override
-	public void update(Account obj) {
+	public void update(Object a) {
 	}
 
 	@Override
-	public void delete(Account obj) {
+	public void delete(Object a) {
 		
 	}
 }

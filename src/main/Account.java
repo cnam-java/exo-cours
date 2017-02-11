@@ -5,12 +5,25 @@ public class Account {
 	private String first_name;
 	private String last_name;
 	private double amount;
+	private int idBank;
 	
 	
 	public Account() {
 		//useless
 	}
 	
+	public String toString(){
+		return "Account "+id+" : "+first_name+", "+last_name+", "+amount+".";
+	}
+	
+	public int getIdBank() {
+		return idBank;
+	}
+
+	public void setIdBank(int idBank) {
+		this.idBank = idBank;
+	}
+
 	public int getId() {
 		return id;
 	}
